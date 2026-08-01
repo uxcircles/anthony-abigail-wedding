@@ -462,7 +462,7 @@
     const viewport = document.getElementById('stack-viewport');
     const photos = Array.from(viewport.querySelectorAll('.polaroid'));
     const N = photos.length;
-    const SEGMENT_RATIO = 0.45; // viewport-heights of scroll per photo transition
+    const SEGMENT_RATIO = 0.9; // viewport-heights of scroll per photo transition
 
     const rotations = [-4, 6, -8, 5, -7, 9, -5, 7, -9, 4, -6, 8, -4, 7, -8];
     const depthKeyframes = [
