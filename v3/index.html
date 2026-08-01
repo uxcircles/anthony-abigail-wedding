@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>薛舜中 ＆ 陳永馨 | Wedding Invitation</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%92%8D</text></svg>">
+<meta name="description" content="薛舜中 ＆ 陳永馨　2026年10月3日(六)18:00　台北文華東方酒店 B2大宴會廳　誠摯邀請您見證我們的婚禮">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:title" content="薛舜中 ＆ 陳永馨 | Wedding Invitation">
+<meta property="og:description" content="2026年10月3日(六)18:00・台北文華東方酒店 B2大宴會廳　誠摯邀請您見證我們的婚禮">
+<meta property="og:image" content="https://raw.githubusercontent.com/uxcircles/anthony-abigail-wedding/main/images/m-beach-walk.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="薛舜中 ＆ 陳永馨 | Wedding Invitation">
+<meta name="twitter:description" content="2026年10月3日(六)18:00・台北文華東方酒店 B2大宴會廳">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/uxcircles/anthony-abigail-wedding/main/images/m-beach-walk.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  :root{
+    --cream: #f8f3e9;
+    --cream-deep: #f1e9da;
+    --ink: #3c352c;
+    --ink-soft: #6b6156;
+    --gold: #a3835a;
+    --line: #ddd1ba;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: var(--cream);
+    color: var(--ink);
+    font-family: "Noto Serif TC", serif;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+  .eyebrow{
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    letter-spacing: 0.35em;
+    font-size: 13px;
+    color: var(--gold);
+    text-transform: uppercase;
+    text-align: center;
+  }
+  #schedule-eyebrow{
+    opacity: 0;
+    transform: translateY(16px);
+    will-change: opacity, transform;
+  }
+  section{
+    padding: 120px 24px;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .reveal{
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .reveal.in{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding-top: 90px;
+    padding-bottom: 100px;
+  }
+  .frame{
+    display:inline-block;
+    background:#fff;
+    padding: 14px 14px 34px 14px;
+    box-shadow: 0 30px 60px -20px rgba(60,53,44,0.25);
+    max-width: 440px;
+    width: 82vw;
+  }
+  .frame img{
+    display:block;
+    width:100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 4 / 5.2;
+  }
+  .hero .eyebrow{ margin-top: 56px; margin-bottom: 22px; }
+  .hero .names{
+    font-size: clamp(38px, 7vw, 58px);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+  .hero .and{
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 18px;
+    letter-spacing: 0.3em;
+    margin: 14px 0;
+  }
+  .hero .date{
+    margin-top: 34px;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+  }
+  .hero .venue-mini{
+    margin-top: 6px;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- FAMILY ---------- */
+  .family{ padding-top: 40px; }
+  .family-grid{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 40px;
+    margin: 40px 0 56px;
+    flex-wrap: wrap;
+  }
+  @media (max-width: 720px){
+    .family-grid{
+      flex-direction: column;
+      gap: 24px;
+      flex-wrap: nowrap;
+    }
+  }
+  .side{ min-width: 200px; }
+  .side .role{
+    font-family:"EB Garamond", serif;
+    font-style: italic;
+    letter-spacing: 0.3em;
+    font-size: 13px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .side .name{
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .side .parents{
+    font-size: 14px;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+  }
+  .amp{
+    font-family:"EB Garamond", serif;
+    font-style: italic;
+    font-size: 26px;
+    color: var(--line);
+  }
+  .family-photo{
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    box-shadow: 0 30px 60px -25px rgba(60,53,44,0.3);
+  }
+
+  /* ---------- MOMENTS ---------- */
+  .moments-label{
+    padding: 120px 24px 0;
+    text-align: center;
+  }
+  .moments{
+    padding: 0;
+    max-width: none;
+    margin: 0;
+    text-align: initial;
+    position: relative;
+  }
+  .stack-viewport{
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .polaroid{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 440px;
+    max-width: 78vw;
+    background: #fff;
+    padding: 16px 16px 40px;
+    box-shadow: 0 22px 50px -18px rgba(60,53,44,0.4);
+    will-change: transform, opacity;
+  }
+  .polaroid img{
+    width: 100%;
+    display: block;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+  @media (max-width: 720px){
+    .polaroid{ width: 320px; }
+  }
+
+  /* ---------- VENUE ---------- */
+  .venue h2{
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    margin: 26px 0 8px;
+  }
+  .venue .hall{
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .venue .addr{
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+  }
+  .map-link{
+    display:inline-block;
+    font-family:"EB Garamond", serif;
+    font-style: italic;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 3px;
+    margin-bottom: 40px;
+  }
+  .map-wrap{
+    border: 10px solid #fff;
+    box-shadow: 0 30px 60px -25px rgba(60,53,44,0.3);
+    position: relative;
+  }
+  #venue-map{
+    width:100%;
+    height: 360px;
+    background: #3a2c22;
+  }
+  #venue-map .leaflet-tile-pane{
+    filter: invert(89%) sepia(28%) hue-rotate(345deg) saturate(320%) brightness(0.86) contrast(1.05);
+  }
+  #venue-map .leaflet-control-attribution{
+    font-family: "EB Garamond", serif;
+    font-size: 10px;
+    background: rgba(248,243,233,0.85);
+    color: var(--ink-soft);
+  }
+  #venue-map .leaflet-control-zoom a{
+    background: #fff;
+    color: var(--gold);
+    border-color: var(--line) !important;
+  }
+  .venue-pin{
+    width: 16px;
+    height: 16px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--gold);
+    transform: rotate(-45deg);
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(60,53,44,0.4);
+  }
+  .venue-popup{
+    font-family: "Noto Serif TC", serif;
+    text-align: center;
+    color: var(--ink);
+    font-size: 13px;
+    letter-spacing: 0.03em;
+  }
+  .leaflet-popup-content-wrapper{
+    background: var(--cream);
+    border-radius: 2px;
+  }
+  .leaflet-popup-tip{
+    background: var(--cream);
+  }
+
+  /* ---------- SCHEDULE ---------- */
+  .flower-wrap{
+    max-width: 380px;
+    width: 70vw;
+    margin: 8px auto 40px;
+  }
+  .flower-wrap svg{
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+  .flower-wrap path{
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .timeline{
+    list-style:none;
+    margin-top: 48px;
+    display:inline-block;
+    text-align: left;
+  }
+  .timeline li{
+    display:flex;
+    align-items:baseline;
+    gap: 28px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(16px);
+    will-change: opacity, transform;
+  }
+  .timeline li:last-child{ border-bottom: none; }
+  .timeline .time{
+    font-family:"EB Garamond", serif;
+    font-size: 20px;
+    color: var(--gold);
+    min-width: 74px;
+  }
+  .timeline .event{
+    font-size: 17px;
+    letter-spacing: 0.04em;
+  }
+  .calendar-cta{
+    margin-top: 56px;
+    display:flex;
+    justify-content:center;
+    gap: 18px;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(16px);
+    will-change: opacity, transform;
+  }
+  .cal-btn{
+    font-family:"EB Garamond", serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid var(--gold);
+    padding: 10px 22px;
+    border-radius: 2px;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+  .cal-btn:hover{
+    background: var(--gold);
+    color: #fff;
+  }
+
+  /* ---------- RSVP ---------- */
+  .rsvp-intro{
+    margin-top: 22px;
+    font-size: 15px;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+  }
+  .rsvp-btn{
+    margin-top: 34px;
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    color: #fff;
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 14px 40px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: opacity 0.25s ease;
+  }
+  .rsvp-btn:hover{ opacity: 0.85; }
+
+  dialog.rsvp-dialog{
+    border: none;
+    border-radius: 3px;
+    padding: 0;
+    max-width: 420px;
+    width: 90vw;
+    background: var(--cream);
+    color: var(--ink);
+    box-shadow: 0 30px 70px -20px rgba(60,53,44,0.5);
+  }
+  dialog.rsvp-dialog::backdrop{
+    background: rgba(45,38,30,0.5);
+  }
+  .rsvp-form{
+    position: relative;
+    padding: 44px 32px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    text-align: left;
+  }
+  .rsvp-form h3{
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 6px;
+  }
+  .rsvp-close{
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 6px;
+  }
+  .rsvp-form label{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+  }
+  .rsvp-form input[type="text"],
+  .rsvp-form textarea{
+    font-family: "Noto Serif TC", serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 10px 12px;
+    resize: vertical;
+  }
+  .rsvp-form input[type="text"]:focus,
+  .rsvp-form textarea:focus,
+  .rsvp-form input[type="number"]:focus{
+    outline: none;
+    border-color: var(--gold);
+  }
+  .rsvp-attend{
+    border: none;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+  }
+  .rsvp-attend legend{
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    padding: 0;
+    margin-bottom: 6px;
+  }
+  .rsvp-attend label{
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .rsvp-counts{
+    display: flex;
+    gap: 16px;
+  }
+  .rsvp-counts label{ flex: 1; }
+  .rsvp-counts input[type="number"]{
+    font-family: "Noto Serif TC", serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    padding: 10px 12px;
+    width: 100%;
+  }
+  .rsvp-submit{
+    margin-top: 8px;
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    color: #fff;
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: opacity 0.25s ease;
+  }
+  .rsvp-submit:hover{ opacity: 0.85; }
+  .rsvp-status{
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+    min-height: 16px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    padding: 100px 24px 90px;
+    text-align:center;
+  }
+  footer img,
+  footer .thanks,
+  footer .names,
+  footer .credit{
+    opacity: 0;
+    transform: translateY(16px);
+    will-change: opacity, transform;
+  }
+  footer img{
+    width: 180px;
+    height: auto;
+    margin-bottom: 40px;
+    box-shadow: 0 20px 40px -20px rgba(60,53,44,0.35);
+  }
+  footer .thanks{
+    font-size: 15px;
+    color: var(--ink-soft);
+    letter-spacing: 0.06em;
+    margin-bottom: 18px;
+  }
+  footer .names{
+    font-family:"EB Garamond", serif;
+    font-style: italic;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+  }
+  footer .credit{
+    margin-top: 70px;
+    font-family:"EB Garamond", serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--line);
+  }
+  footer .credit a{
+    color: var(--line);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  footer .credit a:hover{
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="frame reveal">
+      <img src="images/hero.jpg" alt="薛舜中 與 陳永馨">
+    </div>
+    <p class="eyebrow reveal">wedding invitation</p>
+    <h1 class="names reveal">薛舜中</h1>
+    <p class="and reveal">and</p>
+    <h1 class="names reveal">陳永馨</h1>
+    <p class="date reveal">2026年10月3日 星期六・18:00 晚宴入席</p>
+    <p class="venue-mini reveal">台北文華東方酒店・B2 大宴會廳</p>
+  </section>
+
+  <section class="family">
+    <p class="eyebrow reveal">our families</p>
+    <div class="family-grid">
+      <div class="side reveal">
+        <p class="role">新郎</p>
+        <p class="name">薛舜中</p>
+        <p class="parents">薛博仁・吳慧慧　之子</p>
+      </div>
+      <div class="amp reveal">&amp;</div>
+      <div class="side reveal">
+        <p class="role">新娘</p>
+        <p class="name">陳永馨</p>
+        <p class="parents">陳震中・廖幼玫　之女</p>
+      </div>
+    </div>
+    <img class="family-photo reveal" src="images/m-studio-dance.jpg" alt="新人合影">
+  </section>
+
+  <p class="eyebrow moments-label reveal">moments</p>
+  <section class="moments" id="moments-section">
+    <div class="stack-viewport" id="stack-viewport">
+      <div class="polaroid"><img src="images/m-beach-hold.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-groom-bouquet.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-garden-tulips.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-veil-closeup.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-window-first-look.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-beach-letter-wide.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-studio-standing.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-beach-forehead.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-beach-walk.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-red-door.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-beach-silhouette.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-bride-lounge.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-beach-letter.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-beach-shore.jpg" alt=""></div>
+      <div class="polaroid"><img src="images/m-first-look.jpg" alt=""></div>
+    </div>
+  </section>
+
+  <section class="venue">
+    <p class="eyebrow reveal">venue</p>
+    <h2 class="reveal">台北文華東方酒店</h2>
+    <p class="hall reveal">B2 大宴會廳</p>
+    <p class="addr reveal">台北市松山區敦化北路158號</p>
+    <a class="map-link reveal" href="https://www.google.com/maps/search/?api=1&query=%E5%8F%B0%E5%8C%97%E6%96%87%E8%8F%AF%E6%9D%B1%E6%96%B9%E9%85%92%E5%BA%97" target="_blank" rel="noopener">open map →</a>
+    <div class="map-wrap reveal">
+      <div id="venue-map"></div>
+    </div>
+  </section>
+
+  <section class="schedule" id="schedule-section">
+    <div class="flower-wrap" id="flower-wrap">
+      <svg viewBox="0 0 429 269" xmlns="http://www.w3.org/2000/svg">
+        <path id="flower-path" d="M0.205078 222.358C6.87174 225.358 29.9051 228.458 68.7051 216.858C117.205 202.358 144.604 188.358 165.705 188.358C186.205 188.358 199.626 193.357 206.205 203.357C218.705 222.358 237.705 262.857 238.705 267.357C239.705 271.857 228.205 240.857 228.205 233.857M228.205 233.857C227.705 230.857 226.705 218.358 225.705 214.858C224.705 211.358 218.205 205.858 216.705 198.858C215.205 191.858 206.205 164.857 208.705 167.358C211.205 169.858 216.705 188.358 216.705 190.858C216.705 193.358 208.705 188.358 201.705 182.858C194.705 177.358 177.205 171.858 165.705 167.358C154.205 162.858 156.205 150.858 149.705 142.358C143.205 133.858 131.705 132.358 127.205 131.358C122.705 130.358 131.705 133.858 138.705 135.358C145.705 136.858 158.705 135.358 177.205 139.858C195.705 144.358 205.286 158.679 207.205 160.357C211.205 163.857 217.205 164.358 221.205 161.358C225.205 158.357 225.624 154.857 225.624 143.357C225.624 131.857 217.205 117.857 189.705 104.857C167.705 94.4572 141.872 105.857 131.705 112.857C137.872 111.857 151.905 109.857 158.705 109.857C171.205 109.857 179.205 114.357 189.705 126.357C200.205 138.357 200.705 143.357 201.705 148.357C202.705 153.357 202.205 158.357 204.205 164.857C206.205 171.357 217.705 197.357 221.205 203.357C221.677 204.166 222.149 205.184 222.612 206.357M228.205 233.857C228.705 236.857 222.705 224.021 221.205 214.858C219.705 205.695 223.205 128.858 223.205 119.358C223.205 109.857 223.205 88.3577 223.205 83.8577C223.205 80.2577 220.872 65.3577 219.705 58.3577C219.155 55.0558 217.705 56.3577 217.705 60.3577C217.705 65.3577 219.705 104.358 226.705 105.858C233.705 107.358 236.705 104.358 240.205 95.8578C243.705 87.3578 251.705 68.8578 261.705 54.3578C271.705 39.8578 288.705 25.3578 295.205 23.3578C301.705 21.3578 297.205 17.8578 284.705 19.3578C272.205 20.8578 254.205 40.3577 249.705 44.3577C245.205 48.3577 243.205 54.3578 232.205 54.3578C221.205 54.3578 211.205 52.8577 211.705 41.8577C212.205 30.8577 216.205 19.8577 234.205 10.8577C252.205 1.85765 259.705 -2.14235 270.205 2.35765C280.705 6.85765 299.205 18.8574 290.705 29.3574C282.205 39.8574 255.205 48.8574 249.705 50.8574C244.205 52.8574 238.705 55.8574 240.205 50.8574C241.705 45.8574 247.205 29.8574 249.705 29.8574C252.205 29.8574 249.517 40.8574 245.205 48.3574C240.893 55.8574 227.747 56.8574 223.205 56.8574C221.205 56.8574 218.916 56.5082 218.916 56.5082M228.205 233.857C228.205 227.801 225.585 213.885 222.612 206.357M428.205 173.357C423.038 175.357 409.605 178.157 397.205 173.357C381.705 167.358 354.205 149.857 315.705 151.857C277.205 153.857 254.705 162.857 245.705 178.857C242.505 184.546 239.748 191.119 237.725 197.857M237.725 197.857C234.058 210.074 234.305 229.335 237.205 238.357C241.705 252.357 241.661 239.858 239.205 224.857C236.749 209.857 237.205 183.357 249.205 177.357C261.205 171.357 268.705 169.857 278.705 171.357C288.705 172.857 295.205 175.357 294.205 175.857C293.205 176.357 282.205 174.357 278.705 178.857C275.205 183.357 277.205 187.358 272.205 190.858C267.205 194.357 252.205 194.857 247.705 199.857C243.205 204.857 237.705 210.357 237.205 217.857C236.805 223.857 235.78 230.024 235.947 232.857C234.447 221.524 233.005 197.257 234.205 186.857C235.705 173.857 239.334 160.055 244.705 153.857C251.205 146.357 261.705 145.857 266.705 136.857C272.311 126.767 272.177 116.077 271.705 111.357C271.205 106.357 269.705 101.857 267.705 102.857C265.705 103.857 266.422 105.423 261.705 114.857C257.705 122.857 250.082 131.727 247.705 138.857C246.205 143.357 245.662 150.431 256.205 149.268C257.735 149.1 259.551 148.801 261.705 148.357C278.705 144.857 298.848 140.357 311.705 131.357C321.705 124.357 325.705 119.857 331.205 118.357C337.931 116.523 341.897 117.36 348.205 120.948M348.205 120.948C348.698 121.229 349.198 121.531 349.705 121.857C356.705 126.357 365.705 128.857 368.205 126.357C370.705 123.857 357.299 109.542 345.205 99.3574C335.705 91.3574 324.205 84.8571 317.705 80.8574C311.317 76.9268 290.705 65.3574 278.705 67.3574C266.786 69.3439 262.705 75.358 264.205 83.8577C265.705 92.3574 267.944 101.981 280.205 111.357C288.705 117.857 296.205 120.948 304.705 119.357C311.705 118.047 318.705 112.357 326.205 112.857C332.205 113.257 343.372 118.418 348.205 120.948ZM365.705 121.857C360.538 115.691 345.805 102.957 328.205 101.357C315.705 100.221 305.205 101.357 296.205 104.857C291.005 106.88 285.306 109.151 282.205 110.357M282.205 110.357C279.94 111.239 279.76 111.357 278.705 111.357C276.205 111.357 289.291 89.2716 290.705 87.8574C293.205 85.3574 295.705 86.3574 293.205 92.3574C291.205 97.1574 284.538 106.496 282.205 110.357ZM256.205 149.268C253.705 150.298 248.105 153.557 245.705 158.357C242.705 164.357 239.833 173.949 238.705 180.857C237.725 186.857 238.052 194.524 237.725 197.857M237.725 104.857C236.219 105.024 232.705 106.257 230.705 109.857C228.205 114.357 227.705 116.857 226.705 123.857C225.705 130.857 225.205 164.357 224.205 174.857C223.405 183.257 222.81 199.357 222.612 206.357"/>
+      </svg>
+    </div>
+    <p class="eyebrow" id="schedule-eyebrow">schedule</p>
+    <ul class="timeline" id="timeline-list">
+      <li><span class="time">17:30</span><span class="event">Cocktail Hour</span></li>
+      <li><span class="time">18:00</span><span class="event">Dinner &amp; Ceremony</span></li>
+      <li><span class="time">21:00</span><span class="event">Photo Time</span></li>
+      <li><span class="time">21:30</span><span class="event">Sweet Dreams</span></li>
+    </ul>
+    <div class="calendar-cta" id="calendar-cta">
+      <a id="cal-google" class="cal-btn" target="_blank" rel="noopener">+ Google 日曆</a>
+      <a id="cal-ics" class="cal-btn">+ Apple / Outlook</a>
+    </div>
+  </section>
+
+  <section class="rsvp">
+    <p class="eyebrow reveal">rsvp</p>
+    <p class="rsvp-intro reveal">敬請回覆，期待與您共度這個重要時刻</p>
+    <button type="button" class="rsvp-btn reveal" id="rsvp-open">立即回覆 RSVP</button>
+  </section>
+
+  <dialog class="rsvp-dialog" id="rsvp-dialog">
+    <form class="rsvp-form" id="rsvp-form">
+      <button type="button" class="rsvp-close" id="rsvp-close" aria-label="關閉">&times;</button>
+      <h3>RSVP</h3>
+      <label>姓名
+        <input type="text" name="name" required>
+      </label>
+      <fieldset class="rsvp-attend">
+        <legend>是否出席</legend>
+        <label><input type="radio" name="attending" value="yes" checked> 準時出席</label>
+        <label><input type="radio" name="attending" value="no"> 無法出席</label>
+      </fieldset>
+      <div class="rsvp-counts" id="rsvp-counts">
+        <label>大人人數
+          <input type="number" name="adults" min="0" value="1">
+        </label>
+        <label>小孩人數
+          <input type="number" name="children" min="0" value="0">
+        </label>
+      </div>
+      <label>給新郎新娘的話
+        <textarea name="message" rows="4" placeholder="想對他們說的話"></textarea>
+      </label>
+      <button type="submit" class="rsvp-submit">送出</button>
+      <p class="rsvp-status" id="rsvp-status"></p>
+    </form>
+  </dialog>
+
+  <footer>
+    <img src="images/m-rings.jpg" alt="戒指">
+    <p class="thanks">感謝您撥冗參與，見證我們人生中最重要的時刻</p>
+    <p class="names">薛舜中　＆　陳永馨</p>
+    <p class="credit">Designed by <a href="https://ux-circles.com/web" target="_blank" rel="noopener">UX CIRCLES</a></p>
+  </footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.15 });
+  els.forEach(el=>io.observe(el));
+
+  // ---- Moments: scroll-scrubbed polaroid stack ----
+  (function(){
+    const section = document.getElementById('moments-section');
+    const viewport = document.getElementById('stack-viewport');
+    const photos = Array.from(viewport.querySelectorAll('.polaroid'));
+    const N = photos.length;
+    const SEGMENT_RATIO = 0.9; // viewport-heights of scroll per photo transition
+
+    const rotations = [-4, 6, -8, 5, -7, 9, -5, 7, -9, 4, -6, 8, -4, 7, -8];
+    const depthKeyframes = [
+      { x: 0,  y: 0,  scale: 1.000, opacity: 1.00 },
+      { x: 14, y: 18, scale: 0.965, opacity: 0.90 },
+      { x: 26, y: 32, scale: 0.930, opacity: 0.75 },
+      { x: 36, y: 46, scale: 0.900, opacity: 0.00 },
+    ];
+
+    function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+    function lerp(a, b, t){ return a + (b - a) * t; }
+    function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+
+    function layout(){
+      const vh = window.innerHeight;
+      const segment = vh * SEGMENT_RATIO;
+      section.style.height = (vh + (N - 1) * segment) + 'px';
+      update();
+    }
+
+    function update(){
+      const vh = window.innerHeight;
+      const totalScrollable = section.offsetHeight - vh;
+      const rect = section.getBoundingClientRect();
+      let scrolled = clamp(-rect.top, 0, Math.max(totalScrollable, 0));
+      const progress = totalScrollable > 0 ? scrolled / totalScrollable : 0;
+      const rawIndex = 1 + progress * (N - 1); // ranges 1..N across the section
+
+      photos.forEach((el, i) => {
+        const rot = rotations[i % rotations.length];
+        const dir = i === 0 ? 0 : (i % 2 === 1 ? 1 : -1);
+        const e = clamp(rawIndex - i, 0, 1);       // entry progress
+        const a = clamp(rawIndex - i - 1, 0, 3);   // age after entry (depth)
+
+        let x, y, scale, opacity, rotation;
+
+        if (e < 1) {
+          const te = easeOutCubic(e);
+          const startX = dir * (window.innerWidth / 2 + 220);
+          const startY = -40;
+          const startRot = rot + dir * 18;
+          x = lerp(startX, 0, te);
+          y = lerp(startY, 0, te);
+          scale = lerp(1.04, 1, te);
+          opacity = lerp(0, 1, te);
+          rotation = lerp(startRot, rot, te);
+        } else {
+          const lo = Math.floor(a);
+          const hi = Math.min(lo + 1, 3);
+          const t = a - lo;
+          const A = depthKeyframes[lo];
+          const B = depthKeyframes[hi];
+          x = lerp(A.x, B.x, t);
+          y = lerp(A.y, B.y, t);
+          scale = lerp(A.scale, B.scale, t);
+          opacity = lerp(A.opacity, B.opacity, t);
+          rotation = rot;
+        }
+
+        el.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(${rotation}deg) scale(${scale})`;
+        el.style.opacity = opacity;
+        el.style.zIndex = 100 + i;
+      });
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => { update(); ticking = false; });
+        ticking = true;
+      }
+    });
+    window.addEventListener('resize', layout);
+    layout();
+  })();
+
+  // ---- Schedule: flower draws in, then timeline items reveal ----
+  (function(){
+    const wrap = document.getElementById('flower-wrap');
+    const section = document.getElementById('schedule-section');
+    const path = document.getElementById('flower-path');
+    const footer = document.querySelector('footer');
+    const items = [
+      document.getElementById('schedule-eyebrow'),
+      ...document.querySelectorAll('#timeline-list li'),
+      document.getElementById('calendar-cta'),
+      footer.querySelector('img'),
+      footer.querySelector('.thanks'),
+      footer.querySelector('.names'),
+      footer.querySelector('.credit'),
+    ];
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+
+    function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+    function lerp(a, b, t){ return a + (b - a) * t; }
+
+    // 0 -> 1 as `el` travels through the band [startVH, endVH] of the viewport
+    function bandProgress(el, startVH, endVH){
+      const r = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const total = (vh * startVH - vh * endVH) + r.height;
+      const scrolled = (vh * startVH) - r.top;
+      return clamp(total > 0 ? scrolled / total : 0, 0, 1);
+    }
+
+    // 0 -> 1 between an absolute scrollY start point and the true bottom of
+    // the page, so it always reaches 1 exactly when the page finishes scrolling
+    function scrollBandProgress(startScrollY){
+      const vh = window.innerHeight;
+      const endScrollY = document.documentElement.scrollHeight - vh;
+      const total = endScrollY - startScrollY;
+      const scrolled = window.scrollY - startScrollY;
+      return clamp(total > 0 ? scrolled / total : 0, 0, 1);
+    }
+
+    function update(){
+      // flower starts drawing once it reaches mid-screen, finishes much later (slow draw)
+      const flowerProgress = bandProgress(wrap, 0.5, -0.6);
+      path.style.strokeDashoffset = len * (1 - flowerProgress);
+
+      // items (schedule rows, calendar buttons, then footer) reveal one after
+      // another across the rest of the page, ending exactly at the true bottom
+      const itemsStart = section.offsetTop - window.innerHeight * 0.3;
+      const itemsProgress = scrollBandProgress(itemsStart);
+      items.forEach((li, i) => {
+        const start = i * 0.09;
+        const p = clamp((itemsProgress - start) / 0.19, 0, 1);
+        li.style.opacity = p;
+        li.style.transform = `translateY(${lerp(16, 0, p)}px)`;
+      });
+    }
+
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => { update(); ticking = false; });
+        ticking = true;
+      }
+    });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  const venueCoords = [25.0556686, 121.5482403];
+  const map = L.map('venue-map', {
+    scrollWheelZoom: false,
+    zoomControl: true,
+  }).setView(venueCoords, 16);
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
+    maxZoom: 19,
+  }).addTo(map);
+
+  const pinIcon = L.divIcon({
+    className: '',
+    html: '<div class="venue-pin"></div>',
+    iconSize: [16, 16],
+    iconAnchor: [8, 14],
+  });
+
+  L.marker(venueCoords, { icon: pinIcon }).addTo(map)
+    .bindPopup('<div class="venue-popup">台北文華東方酒店<br>Mandarin Oriental, Taipei</div>')
+    .openPopup();
+
+  // ---- Add to calendar ----
+  const eventTitle = '薛舜中 ＆ 陳永馨 婚禮晚宴';
+  const eventLocation = '台北文華東方酒店 B2大宴會廳，台北市松山區敦化北路158號';
+  const eventDetails = '17:30 Cocktail Hour\n18:00 Dinner & Ceremony\n21:00 Photo Time\n21:30 Sweet Dreams';
+  const startUTC = '20261003T093000Z'; // 2026-10-03 17:30 Asia/Taipei
+  const endUTC = '20261003T140000Z';   // 2026-10-03 22:00 Asia/Taipei
+
+  const googleUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
+    + '&text=' + encodeURIComponent(eventTitle)
+    + '&dates=' + startUTC + '/' + endUTC
+    + '&details=' + encodeURIComponent(eventDetails)
+    + '&location=' + encodeURIComponent(eventLocation);
+  document.getElementById('cal-google').href = googleUrl;
+
+  const icsContent = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Wedding Invitation//ZH//',
+    'BEGIN:VEVENT',
+    'UID:xue-chen-wedding-20261003@invitation',
+    'DTSTAMP:' + startUTC,
+    'DTSTART:' + startUTC,
+    'DTEND:' + endUTC,
+    'SUMMARY:' + eventTitle,
+    'DESCRIPTION:' + eventDetails.replace(/\n/g, '\\n'),
+    'LOCATION:' + eventLocation,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ].join('\r\n');
+  const icsBlob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const icsUrl = URL.createObjectURL(icsBlob);
+  const icsLink = document.getElementById('cal-ics');
+  icsLink.href = icsUrl;
+  icsLink.download = '薛舜中陳永馨婚禮.ics';
+
+  // ---- RSVP dialog ----
+  (function(){
+    // TODO: paste your deployed Google Apps Script Web App URL here
+    const GOOGLE_SCRIPT_URL = '';
+
+    const dialog = document.getElementById('rsvp-dialog');
+    const openBtn = document.getElementById('rsvp-open');
+    const closeBtn = document.getElementById('rsvp-close');
+    const form = document.getElementById('rsvp-form');
+    const status = document.getElementById('rsvp-status');
+    const counts = document.getElementById('rsvp-counts');
+    const attendRadios = form.querySelectorAll('input[name="attending"]');
+
+    openBtn.addEventListener('click', () => {
+      status.textContent = '';
+      dialog.showModal();
+    });
+    closeBtn.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close(); // click on backdrop
+    });
+
+    function toggleCounts(){
+      const attending = form.querySelector('input[name="attending"]:checked').value;
+      counts.style.display = attending === 'yes' ? 'flex' : 'none';
+    }
+    attendRadios.forEach(r => r.addEventListener('change', toggleCounts));
+    toggleCounts();
+
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const data = {
+        name: form.name.value,
+        attending: form.attending.value,
+        adults: form.attending.value === 'yes' ? form.adults.value : '0',
+        children: form.attending.value === 'yes' ? form.children.value : '0',
+        message: form.message.value,
+      };
+
+      if (!GOOGLE_SCRIPT_URL) {
+        status.textContent = '（尚未連接 Google 試算表，此為測試畫面）';
+        console.log('RSVP submission (not sent):', data);
+        return;
+      }
+
+      status.textContent = '送出中...';
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(data),
+      }).then(() => {
+        status.textContent = '感謝您的回覆！';
+        form.reset();
+        toggleCounts();
+        setTimeout(() => dialog.close(), 1400);
+      }).catch(() => {
+        status.textContent = '送出失敗，請稍後再試。';
+      });
+    });
+  })();
+</script>
+</body>
+</html>
