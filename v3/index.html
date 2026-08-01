@@ -97,8 +97,8 @@
   }
   @media (max-width: 600px){
     .envelope-stage{
-      width: auto;
-      height: 100vh;
+      width: 130vw;
+      height: auto;
     }
   }
   .envelope-bottom-stack{
@@ -107,10 +107,10 @@
     z-index: 1;
   }
   @keyframes envelopeFrameCycle{
-    0%   { opacity: 0; transform: translateY(0); }
+    0%   { opacity: 0; transform: translateY(-10px); }
     20%  { opacity: 1; transform: translateY(0); }
-    55%  { opacity: 1; transform: translateY(0); }
-    100% { opacity: 0; transform: translateY(70px); }
+    60%  { opacity: 1; transform: translateY(35px); }
+    100% { opacity: 0; transform: translateY(80px); }
   }
   .envelope-bottom-frame{
     position: absolute;
@@ -120,10 +120,8 @@
     height: auto;
     display: block;
     opacity: 0;
-    filter:
-      drop-shadow(0 2px 3px rgba(107,67,33,0.16))
-      drop-shadow(0 16px 24px rgba(107,67,33,0.22))
-      drop-shadow(0 38px 54px rgba(107,67,33,0.2));
+    will-change: transform, opacity;
+    filter: drop-shadow(0 20px 34px rgba(107,67,33,0.22));
   }
   .envelope-bottom-frame.is-base{
     opacity: 1;
@@ -147,11 +145,9 @@
     width: 100%;
     display: block;
     transform-origin: top center;
-    filter:
-      drop-shadow(0 2px 4px rgba(107,67,33,0.2))
-      drop-shadow(0 10px 16px rgba(107,67,33,0.22))
-      drop-shadow(0 22px 30px rgba(107,67,33,0.16));
-    transition: transform 0.55s cubic-bezier(0.6,0,0.3,1), opacity 0.5s ease 0.15s;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 10px 18px rgba(107,67,33,0.28));
+    transition: transform 0.6s ease-out, opacity 0.45s ease-out 0.15s;
   }
   .wax-seal{
     position: absolute;
@@ -164,7 +160,8 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    transition: opacity 0.3s ease, transform 0.3s ease;
+    will-change: transform, opacity;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
   }
   .wax-seal img{
     width: 100%;
@@ -182,7 +179,8 @@
   .envelope-hint{
     position: absolute;
     left: 50%;
-    top: 74%;
+    top: 100%;
+    margin-top: 24px;
     transform: translateX(-50%);
     width: max-content;
     z-index: 3;
@@ -192,6 +190,12 @@
     font-size: 14px;
     color: var(--ink-soft);
     transition: opacity 0.3s ease;
+  }
+  @media (max-width: 600px){
+    .envelope-hint{
+      top: 74%;
+      margin-top: 0;
+    }
   }
   .envelope-intro.is-opening .envelope-flap{
     transform: scaleY(0.15);
@@ -867,18 +871,18 @@
       intro.classList.add('is-opening'); // flattens+fades flap, pops+fades wax seal
 
       setTimeout(() => {
-        cycleFrame(1); // bottom2: appears, then drifts down + fades
+        cycleFrame(1); // bottom2: appears, holds, then drifts down + fades (0.9s)
         bottomFrames[0].classList.add('is-fading-base'); // bottom3 fades away underneath
       }, 300);
 
       setTimeout(() => {
-        intro.classList.add('is-hidden'); // whole cover fades together with bottom2's own drift-fade
+        intro.classList.add('is-hidden'); // whole cover fades once bottom2's drift is visible
         document.body.classList.remove('envelope-locked');
-        if (heroFrame) heroFrame.classList.add('in'); // photo rises into view sooner
-      }, 350);
+        if (heroFrame) heroFrame.classList.add('in');
+      }, 700);
       setTimeout(() => {
         intro.style.display = 'none';
-      }, 1100);
+      }, 1400);
     }, { once: true });
   })();
 
