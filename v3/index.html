@@ -78,10 +78,8 @@
     z-index: 1000;
     background: var(--cream);
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 28px;
     overflow: hidden;
     transition: opacity 0.7s ease;
   }
@@ -99,27 +97,48 @@
   }
   @media (max-width: 600px){
     .envelope-stage{
-      width: 130vw;
+      width: auto;
+      height: 100vh;
     }
   }
-  .envelope-bottom{
+  .envelope-bottom-stack{
     position: absolute;
-    top: 0;
+    inset: 0;
+    z-index: 1;
+  }
+  @keyframes envelopeFrameCycle{
+    0%   { opacity: 0; transform: translateY(0); }
+    20%  { opacity: 1; transform: translateY(0); }
+    55%  { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(70px); }
+  }
+  .envelope-bottom-frame{
+    position: absolute;
+    bottom: 0;
     left: 0;
     width: 100%;
+    height: auto;
     display: block;
-    z-index: 1;
+    opacity: 0;
     filter:
       drop-shadow(0 2px 3px rgba(107,67,33,0.16))
       drop-shadow(0 16px 24px rgba(107,67,33,0.22))
       drop-shadow(0 38px 54px rgba(107,67,33,0.2));
-    transition: transform 0.9s cubic-bezier(0.6,0,0.3,1);
+  }
+  .envelope-bottom-frame.is-base{
+    opacity: 1;
+    transition: opacity 0.5s ease;
+  }
+  .envelope-bottom-frame.is-base.is-fading-base{
+    opacity: 0;
+  }
+  .envelope-bottom-frame.is-cycling{
+    animation: envelopeFrameCycle 0.9s ease forwards;
   }
   .envelope-top-group{
     position: absolute;
     inset: 0;
     z-index: 2;
-    transition: transform 0.9s cubic-bezier(0.6,0,0.3,1);
   }
   .envelope-flap{
     position: absolute;
@@ -127,10 +146,12 @@
     left: 0;
     width: 100%;
     display: block;
+    transform-origin: top center;
     filter:
       drop-shadow(0 2px 4px rgba(107,67,33,0.2))
       drop-shadow(0 10px 16px rgba(107,67,33,0.22))
       drop-shadow(0 22px 30px rgba(107,67,33,0.16));
+    transition: transform 0.55s cubic-bezier(0.6,0,0.3,1), opacity 0.5s ease 0.15s;
   }
   .wax-seal{
     position: absolute;
@@ -143,6 +164,7 @@
     border: none;
     padding: 0;
     cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
   .wax-seal img{
     width: 100%;
@@ -158,6 +180,12 @@
     transform: scale(1.04);
   }
   .envelope-hint{
+    position: absolute;
+    left: 50%;
+    top: 74%;
+    transform: translateX(-50%);
+    width: max-content;
+    z-index: 3;
     font-family: "EB Garamond", serif;
     font-style: italic;
     letter-spacing: 0.15em;
@@ -165,11 +193,13 @@
     color: var(--ink-soft);
     transition: opacity 0.3s ease;
   }
-  .envelope-intro.is-opening .envelope-top-group{
-    transform: translateY(-70vh);
+  .envelope-intro.is-opening .envelope-flap{
+    transform: scaleY(0.15);
+    opacity: 0;
   }
-  .envelope-intro.is-opening .envelope-bottom{
-    transform: translateY(70vh);
+  .envelope-intro.is-opening .wax-seal{
+    opacity: 0;
+    transform: translate(-50%, -85%) scale(1.08);
   }
   .envelope-intro.is-opening .envelope-hint{
     opacity: 0;
@@ -682,15 +712,18 @@
 
   <div class="envelope-intro" id="envelope-intro">
     <div class="envelope-stage">
-      <img class="envelope-bottom" src="images/envelope-bottom.png" alt="">
+      <div class="envelope-bottom-stack" id="envelope-bottom-stack">
+        <img class="envelope-bottom-frame is-base" src="images/envelope-bottom3.png" alt="">
+        <img class="envelope-bottom-frame" src="images/envelope-bottom2.png" alt="">
+      </div>
       <div class="envelope-top-group">
         <img class="envelope-flap" src="images/envelope-flap.png" alt="">
         <button type="button" class="wax-seal" id="wax-seal" aria-label="拆開信封">
           <img src="images/wax-seal.png" alt="">
         </button>
       </div>
+      <p class="envelope-hint">點擊封蠟，拆開信封</p>
     </div>
-    <p class="envelope-hint">點擊封蠟，拆開信封</p>
   </div>
 
   <section class="hero">
@@ -824,17 +857,28 @@
     if (!intro || !seal) return;
 
     const heroFrame = document.getElementById('hero-frame');
+    const bottomFrames = document.querySelectorAll('#envelope-bottom-stack .envelope-bottom-frame');
+
+    function cycleFrame(i){
+      bottomFrames[i].classList.add('is-cycling');
+    }
 
     seal.addEventListener('click', () => {
-      intro.classList.add('is-opening');
+      intro.classList.add('is-opening'); // flattens+fades flap, pops+fades wax seal
+
       setTimeout(() => {
-        intro.classList.add('is-hidden');
-        document.body.classList.remove('envelope-locked');
-        if (heroFrame) heroFrame.classList.add('in');
+        cycleFrame(1); // bottom2: appears, then drifts down + fades
+        bottomFrames[0].classList.add('is-fading-base'); // bottom3 fades away underneath
       }, 300);
+
+      setTimeout(() => {
+        intro.classList.add('is-hidden'); // whole cover fades together with bottom2's own drift-fade
+        document.body.classList.remove('envelope-locked');
+        if (heroFrame) heroFrame.classList.add('in'); // photo rises into view sooner
+      }, 350);
       setTimeout(() => {
         intro.style.display = 'none';
-      }, 1000);
+      }, 1100);
     }, { once: true });
   })();
 
