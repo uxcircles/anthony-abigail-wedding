@@ -381,11 +381,25 @@
     padding: 0;
     max-width: 420px;
     width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    margin: auto;
     background: var(--cream);
     color: var(--ink);
     box-shadow: 0 30px 70px -20px rgba(60,53,44,0.5);
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  dialog.rsvp-dialog.is-visible{
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
   dialog.rsvp-dialog::backdrop{
+    background: rgba(45,38,30,0);
+    transition: background 0.25s ease;
+  }
+  dialog.rsvp-dialog.is-visible::backdrop{
     background: rgba(45,38,30,0.5);
   }
   .rsvp-form{
@@ -462,6 +476,9 @@
     gap: 6px;
     font-size: 14px;
     color: var(--ink);
+  }
+  .rsvp-attend input[type="radio"]{
+    accent-color: var(--gold);
   }
   .rsvp-counts{
     display: flex;
@@ -909,13 +926,22 @@
     const counts = document.getElementById('rsvp-counts');
     const attendRadios = form.querySelectorAll('input[name="attending"]');
 
-    openBtn.addEventListener('click', () => {
+    function openDialog(){
       status.textContent = '';
       dialog.showModal();
-    });
-    closeBtn.addEventListener('click', () => dialog.close());
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        dialog.classList.add('is-visible');
+      }));
+    }
+    function closeDialog(){
+      dialog.classList.remove('is-visible');
+      setTimeout(() => dialog.close(), 250);
+    }
+
+    openBtn.addEventListener('click', openDialog);
+    closeBtn.addEventListener('click', closeDialog);
     dialog.addEventListener('click', (e) => {
-      if (e.target === dialog) dialog.close(); // click on backdrop
+      if (e.target === dialog) closeDialog(); // click on backdrop
     });
 
     function toggleCounts(){
@@ -951,7 +977,7 @@
         status.textContent = '感謝您的回覆！';
         form.reset();
         toggleCounts();
-        setTimeout(() => dialog.close(), 1400);
+        setTimeout(closeDialog, 1400);
       }).catch(() => {
         status.textContent = '送出失敗，請稍後再試。';
       });
