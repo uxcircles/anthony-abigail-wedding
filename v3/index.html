@@ -82,7 +82,8 @@
     align-items: center;
     justify-content: center;
     gap: 28px;
-    transition: opacity 0.6s ease;
+    overflow: hidden;
+    transition: opacity 0.7s ease;
   }
   .envelope-intro.is-opening{
     pointer-events: none;
@@ -95,6 +96,11 @@
     position: relative;
     width: min(86vw, 460px);
     aspect-ratio: 4070 / 2584;
+  }
+  @media (max-width: 600px){
+    .envelope-stage{
+      width: 130vw;
+    }
   }
   .envelope-bottom{
     position: absolute;
@@ -688,7 +694,7 @@
   </div>
 
   <section class="hero">
-    <div class="frame reveal">
+    <div class="frame reveal" id="hero-frame">
       <img src="images/hero.jpg" alt="薛舜中 與 陳永馨">
     </div>
     <p class="eyebrow reveal">wedding invitation</p>
@@ -817,19 +823,22 @@
     const seal = document.getElementById('wax-seal');
     if (!intro || !seal) return;
 
+    const heroFrame = document.getElementById('hero-frame');
+
     seal.addEventListener('click', () => {
       intro.classList.add('is-opening');
       setTimeout(() => {
         intro.classList.add('is-hidden');
         document.body.classList.remove('envelope-locked');
-      }, 900);
+        if (heroFrame) heroFrame.classList.add('in');
+      }, 300);
       setTimeout(() => {
         intro.style.display = 'none';
-      }, 1500);
+      }, 1000);
     }, { once: true });
   })();
 
-  const els = document.querySelectorAll('.reveal');
+  const els = document.querySelectorAll('.reveal:not(#hero-frame)');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
