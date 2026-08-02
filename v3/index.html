@@ -1018,12 +1018,12 @@
 
     function update(){
       // flower starts drawing once it reaches mid-screen, finishes much later (slow draw)
-      const flowerProgress = bandProgress(wrap, 0.5, -0.6);
+      const flowerProgress = bandProgress(wrap, 0.95, -0.6);
       path.style.strokeDashoffset = len * (1 - flowerProgress);
 
       // items (schedule rows, calendar buttons, then footer) reveal one after
       // another across the rest of the page, ending exactly at the true bottom
-      const itemsStart = section.offsetTop - getStableVH() * 0.3;
+      const itemsStart = section.offsetTop - getStableVH() * 0.7;
       const itemsProgress = scrollBandProgress(itemsStart);
       items.forEach((li, i) => {
         const start = i * 0.09;

@@ -496,6 +496,27 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+  // ---- Stable viewport height (iOS Safari's chrome show/hide fires resize
+  // events that change window.innerHeight mid-scroll without the layout
+  // actually changing; that made scroll-linked sections resize under the
+  // user's finger and jump. Only trust a height change when width also
+  // changed, i.e. a real resize/orientation change.) ----
+  let __stableVH = window.innerHeight;
+  let __lastVW = window.innerWidth;
+  function getStableVH(){
+    if (window.innerWidth !== __lastVW) {
+      __lastVW = window.innerWidth;
+      __stableVH = window.innerHeight;
+    }
+    return __stableVH;
+  }
+  window.addEventListener('resize', () => {
+    if (window.innerWidth !== __lastVW) {
+      __lastVW = window.innerWidth;
+      __stableVH = window.innerHeight;
+    }
+  });
+
   const els = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
@@ -525,14 +546,14 @@
     function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
 
     function layout(){
-      const vh = window.innerHeight;
+      const vh = getStableVH();
       const segment = vh * SEGMENT_RATIO;
       section.style.height = (vh + (N - 1) * segment) + 'px';
       update();
     }
 
     function update(){
-      const vh = window.innerHeight;
+      const vh = getStableVH();
       const totalScrollable = section.offsetHeight - vh;
       const rect = section.getBoundingClientRect();
       let scrolled = clamp(-rect.top, 0, Math.max(totalScrollable, 0));
@@ -612,7 +633,7 @@
     // 0 -> 1 as `el` travels through the band [startVH, endVH] of the viewport
     function bandProgress(el, startVH, endVH){
       const r = el.getBoundingClientRect();
-      const vh = window.innerHeight;
+      const vh = getStableVH();
       const total = (vh * startVH - vh * endVH) + r.height;
       const scrolled = (vh * startVH) - r.top;
       return clamp(total > 0 ? scrolled / total : 0, 0, 1);
@@ -621,7 +642,7 @@
     // 0 -> 1 between an absolute scrollY start point and the true bottom of
     // the page, so it always reaches 1 exactly when the page finishes scrolling
     function scrollBandProgress(startScrollY){
-      const vh = window.innerHeight;
+      const vh = getStableVH();
       const endScrollY = document.documentElement.scrollHeight - vh;
       const total = endScrollY - startScrollY;
       const scrolled = window.scrollY - startScrollY;
@@ -630,12 +651,12 @@
 
     function update(){
       // flower starts drawing once it reaches mid-screen, finishes much later (slow draw)
-      const flowerProgress = bandProgress(wrap, 0.5, -0.6);
+      const flowerProgress = bandProgress(wrap, 0.95, -0.6);
       path.style.strokeDashoffset = len * (1 - flowerProgress);
 
       // items (schedule rows, calendar buttons, then footer) reveal one after
       // another across the rest of the page, ending exactly at the true bottom
-      const itemsStart = section.offsetTop - window.innerHeight * 0.3;
+      const itemsStart = section.offsetTop - getStableVH() * 0.7;
       const itemsProgress = scrollBandProgress(itemsStart);
       items.forEach((li, i) => {
         const start = i * 0.09;
