@@ -1025,8 +1025,10 @@
       // another across the rest of the page, ending exactly at the true bottom
       const itemsStart = section.offsetTop - getStableVH() * 0.7;
       const itemsProgress = scrollBandProgress(itemsStart);
+      // eyebrow, 4 schedule rows, calendar buttons (pulled earlier), then footer
+      const starts = [0, 0.09, 0.18, 0.27, 0.36, 0.40, 0.52, 0.64, 0.72, 0.81];
       items.forEach((li, i) => {
-        const start = i * 0.09;
+        const start = starts[i] !== undefined ? starts[i] : i * 0.09;
         const p = clamp((itemsProgress - start) / 0.19, 0, 1);
         li.style.opacity = p;
         li.style.transform = `translateY(${lerp(16, 0, p)}px)`;
