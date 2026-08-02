@@ -110,7 +110,10 @@
        so the rendered envelope extends well past its own layout box;
        push the hint down so the envelope doesn't visually cover it */
     .envelope-hint{
-      margin-top: 90px;
+      /* the overflow from scale(1.92) grows with viewport width (the
+         stage itself is sized off 86vw), so a flat px margin fell
+         short on wider phones - scale the clearance with vw instead */
+      margin-top: calc(25vw + 12px);
     }
   }
   .envelope-bottom-stack{
