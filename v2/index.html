@@ -651,7 +651,7 @@
 
     function update(){
       // flower starts drawing once it reaches mid-screen, finishes much later (slow draw)
-      const flowerProgress = bandProgress(wrap, 0.95, -0.6);
+      const flowerProgress = bandProgress(wrap, 0.8, -0.6);
       path.style.strokeDashoffset = len * (1 - flowerProgress);
 
       // items (schedule rows, calendar buttons, then footer) reveal one after
