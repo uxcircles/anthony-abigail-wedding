@@ -107,11 +107,9 @@
     inset: 0;
     z-index: 1;
   }
-  @keyframes envelopeFrameCycle{
-    0%   { opacity: 0; transform: translateY(-10px); }
-    12%  { opacity: 1; transform: translateY(0); }
-    60%  { opacity: 1; transform: translateY(35px); }
-    100% { opacity: 0; transform: translateY(80px); }
+  @keyframes envelopeBaseExit{
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
   }
   .envelope-bottom-frame{
     position: absolute;
@@ -126,13 +124,10 @@
   }
   .envelope-bottom-frame.is-base{
     opacity: 1;
-    transition: opacity 0.18s ease-in;
+    transform: translateY(0);
   }
   .envelope-bottom-frame.is-base.is-fading-base{
-    opacity: 0;
-  }
-  .envelope-bottom-frame.is-cycling{
-    animation: envelopeFrameCycle 0.6s ease forwards;
+    animation: envelopeBaseExit 0.5s ease-in forwards;
   }
   .envelope-top-group{
     position: absolute;
@@ -719,7 +714,6 @@
     <div class="envelope-stage">
       <div class="envelope-bottom-stack" id="envelope-bottom-stack">
         <img class="envelope-bottom-frame is-base" src="images/envelope-bottom3.png" alt="">
-        <img class="envelope-bottom-frame" src="images/envelope-bottom2.png" alt="">
       </div>
       <div class="envelope-top-group">
         <img class="envelope-flap" src="images/envelope-flap.png" alt="">
@@ -864,26 +858,18 @@
     const heroFrame = document.getElementById('hero-frame');
     const bottomFrames = document.querySelectorAll('#envelope-bottom-stack .envelope-bottom-frame');
 
-    function cycleFrame(i){
-      bottomFrames[i].classList.add('is-cycling');
-    }
-
     seal.addEventListener('click', () => {
-      intro.classList.add('is-opening'); // flattens+fades flap, pops+fades wax seal
+      intro.classList.add('is-opening'); // flap flattens+drops+fades, wax seal pops+fades
+      bottomFrames[0].classList.add('is-fading-base'); // bottom3 drops down then fades (0.5s)
 
       setTimeout(() => {
-        cycleFrame(1); // bottom2: appears, holds, then drifts down + fades (0.9s)
-        bottomFrames[0].classList.add('is-fading-base'); // bottom3 fades away underneath
-      }, 300);
-
-      setTimeout(() => {
-        intro.classList.add('is-hidden'); // whole cover fades once bottom2's drift is visible
+        intro.classList.add('is-hidden');
         document.body.classList.remove('envelope-locked');
         if (heroFrame) heroFrame.classList.add('in');
-      }, 700);
+      }, 450);
       setTimeout(() => {
         intro.style.display = 'none';
-      }, 1400);
+      }, 1150);
     }, { once: true });
   })();
 
