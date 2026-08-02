@@ -29,7 +29,7 @@
     --line: #ddd1ba;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; overflow-x:hidden;}
   body{
     background: var(--cream);
     color: var(--ink);
@@ -78,8 +78,10 @@
     z-index: 1000;
     background: var(--cream);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 28px;
     overflow: hidden;
     transition: opacity 0.7s ease;
   }
@@ -98,8 +100,17 @@
   }
   @media (max-width: 600px){
     .envelope-stage{
-      width: 165vw;
-      height: auto;
+      /* scale visually instead of setting width > 100vw: a wider layout
+         box on a position:fixed element can get measured into iOS
+         Safari's page width and leave the whole site horizontally
+         scrollable even after the envelope is gone */
+      transform: scale(1.92);
+    }
+    /* the scale above grows equally in every direction from center,
+       so the rendered envelope extends well past its own layout box;
+       push the hint down so the envelope doesn't visually cover it */
+    .envelope-hint{
+      margin-top: 90px;
     }
   }
   .envelope-bottom-stack{
@@ -170,13 +181,6 @@
     transform: scale(1.04);
   }
   .envelope-hint{
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    margin-top: 24px;
-    transform: translateX(-50%);
-    width: max-content;
-    z-index: 3;
     font-family: "EB Garamond", serif;
     font-style: italic;
     letter-spacing: 0.15em;
@@ -711,8 +715,8 @@
           <img src="images/wax-seal.png" alt="">
         </button>
       </div>
-      <p class="envelope-hint">點擊封蠟，拆開信封</p>
     </div>
+    <p class="envelope-hint">點擊封蠟，拆開信封</p>
   </div>
 
   <section class="hero">
