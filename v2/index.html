@@ -67,6 +67,147 @@
     transform: translateY(0);
   }
 
+  /* ---------- ENVELOPE INTRO ---------- */
+  body.envelope-locked{
+    overflow: hidden;
+    height: 100vh;
+  }
+  .envelope-intro{
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    overflow: hidden;
+    transition: opacity 0.7s ease;
+  }
+  .envelope-intro.is-opening{
+    pointer-events: none;
+  }
+  .envelope-intro.is-hidden{
+    opacity: 0;
+    pointer-events: none;
+  }
+  .envelope-stage{
+    position: relative;
+    width: min(86vw, 460px);
+    aspect-ratio: 4070 / 2584;
+    flex-shrink: 0;
+  }
+  @media (max-width: 600px){
+    .envelope-intro{
+      /* pure vertical centering reads as "too high" on tall phone
+         screens - bias the whole envelope+hint group down a bit */
+      padding-top: 12vh;
+    }
+    .envelope-stage{
+      /* scale visually instead of setting width > 100vw: a wider layout
+         box on a position:fixed element can get measured into iOS
+         Safari's page width and leave the whole site horizontally
+         scrollable even after the envelope is gone */
+      transform: scale(1.92);
+    }
+    /* the scale above grows equally in every direction from center,
+       so the rendered envelope extends well past its own layout box;
+       push the hint down so the envelope doesn't visually cover it */
+    .envelope-hint{
+      /* the overflow from scale(1.92) grows with viewport width (the
+         stage itself is sized off 86vw), so a flat px margin fell
+         short on wider phones - scale the clearance with vw instead */
+      margin-top: calc(25vw + 12px);
+    }
+  }
+  .envelope-bottom-stack{
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  @keyframes envelopeBaseExit{
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .envelope-bottom-frame{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 0;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 20px 34px rgba(107,67,33,0.22));
+  }
+  .envelope-bottom-frame.is-base{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .envelope-bottom-frame.is-base.is-fading-base{
+    animation: envelopeBaseExit 0.5s ease-in forwards;
+  }
+  .envelope-top-group{
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+  .envelope-flap{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: block;
+    transform-origin: top center;
+    will-change: transform, opacity;
+    filter: drop-shadow(0 10px 18px rgba(107,67,33,0.28));
+    transition: transform 0.6s ease-out, opacity 0.45s ease-out 0.15s;
+  }
+  .wax-seal{
+    position: absolute;
+    left: 50%;
+    top: 57%;
+    width: 17%;
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    will-change: transform, opacity;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+  .wax-seal img{
+    width: 100%;
+    height: 100%;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(107,67,33,0.32));
+    transition: transform 0.25s ease;
+  }
+  .wax-seal:hover img{
+    transform: scale(1.04);
+  }
+  .envelope-hint{
+    font-family: "EB Garamond", serif;
+    font-style: italic;
+    letter-spacing: 0.15em;
+    font-size: 14px;
+    color: var(--ink-soft);
+    transition: opacity 0.3s ease;
+  }
+  .envelope-intro.is-opening .envelope-flap{
+    transform: scaleY(0.15);
+    opacity: 0;
+  }
+  .envelope-intro.is-opening .wax-seal{
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 20px)) scale(1.05);
+  }
+  .envelope-intro.is-opening .envelope-hint{
+    opacity: 0;
+  }
+
   /* ---------- HERO ---------- */
   .hero{
     padding-top: 90px;
@@ -398,10 +539,25 @@
   }
 </style>
 </head>
-<body>
+<body class="envelope-locked">
+
+  <div class="envelope-intro" id="envelope-intro">
+    <div class="envelope-stage">
+      <div class="envelope-bottom-stack" id="envelope-bottom-stack">
+        <img class="envelope-bottom-frame is-base" src="images/envelope-bottom3.png" alt="">
+      </div>
+      <div class="envelope-top-group">
+        <img class="envelope-flap" src="images/envelope-flap.png" alt="">
+        <button type="button" class="wax-seal" id="wax-seal" aria-label="拆開信封">
+          <img src="images/wax-seal.png" alt="">
+        </button>
+      </div>
+    </div>
+    <p class="envelope-hint">點擊封蠟，拆開信封</p>
+  </div>
 
   <section class="hero">
-    <div class="frame reveal">
+    <div class="frame reveal" id="hero-frame">
       <img src="images/hero.jpg" alt="薛舜中 與 陳永馨">
     </div>
     <p class="eyebrow reveal">wedding invitation</p>
@@ -509,7 +665,31 @@
     }
   });
 
-  const els = document.querySelectorAll('.reveal');
+  // ---- Envelope intro ----
+  (function(){
+    const intro = document.getElementById('envelope-intro');
+    const seal = document.getElementById('wax-seal');
+    if (!intro || !seal) return;
+
+    const heroFrame = document.getElementById('hero-frame');
+    const bottomFrames = document.querySelectorAll('#envelope-bottom-stack .envelope-bottom-frame');
+
+    seal.addEventListener('click', () => {
+      intro.classList.add('is-opening'); // flap flattens+drops+fades, wax seal pops+fades
+      bottomFrames[0].classList.add('is-fading-base'); // bottom3 drops down then fades (0.5s)
+
+      setTimeout(() => {
+        intro.classList.add('is-hidden');
+        document.body.classList.remove('envelope-locked');
+        if (heroFrame) heroFrame.classList.add('in');
+      }, 450);
+      setTimeout(() => {
+        intro.style.display = 'none';
+      }, 1150);
+    }, { once: true });
+  })();
+
+  const els = document.querySelectorAll('.reveal:not(#hero-frame)');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
@@ -727,6 +907,7 @@
   const icsLink = document.getElementById('cal-ics');
   icsLink.href = icsUrl;
   icsLink.download = '薛舜中陳永馨婚禮.ics';
+
 </script>
 </body>
 </html>

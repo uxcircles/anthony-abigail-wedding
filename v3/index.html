@@ -99,6 +99,11 @@
     flex-shrink: 0;
   }
   @media (max-width: 600px){
+    .envelope-intro{
+      /* pure vertical centering reads as "too high" on tall phone
+         screens - bias the whole envelope+hint group down a bit */
+      padding-top: 12vh;
+    }
     .envelope-stage{
       /* scale visually instead of setting width > 100vw: a wider layout
          box on a position:fixed element can get measured into iOS
