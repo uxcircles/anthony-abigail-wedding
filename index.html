@@ -224,7 +224,7 @@
   .section-divider img{ width: 100%; display: block; }
   .hero .bg-illus.is-left{
     top: 10px;
-    left: -10px;
+    left: 0;
     width: 210px;
     max-width: 50vw;
     opacity: 0.6;
@@ -236,6 +236,9 @@
     bottom: -10px;
     width: 100px;
     max-width: 22vw;
+  }
+  @media (max-width: 600px){
+    .frame .bg-illus{ right: -20px; }
   }
   .family-photo-wrap{
     position: relative;
@@ -287,6 +290,9 @@
     width: 100px;
     max-width: 24vw;
     opacity: 0.45;
+  }
+  @media (max-width: 600px){
+    .footer-photo .bg-illus{ right: -15px; }
   }
 
   /* ---------- HERO ---------- */
@@ -1201,14 +1207,6 @@
         ctx.stroke();
       }
       ctx.restore();
-
-      // Soft diagonal shine band, like light catching foil.
-      const shine = ctx.createLinearGradient(0, 0, w, h);
-      shine.addColorStop(0.30, 'rgba(255,255,255,0)');
-      shine.addColorStop(0.42, 'rgba(255,255,255,0.22)');
-      shine.addColorStop(0.5,  'rgba(255,255,255,0)');
-      ctx.fillStyle = shine;
-      ctx.fillRect(0, 0, w, h);
 
       ctx.fillStyle = 'rgba(255,255,255,0.9)';
       ctx.font = `italic ${Math.max(13, w * 0.048)}px "EB Garamond", serif`;
