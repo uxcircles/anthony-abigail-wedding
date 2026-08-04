@@ -212,30 +212,39 @@
   .bg-illus{
     position: absolute;
     z-index: -1;
-    opacity: 0.1;
-    mix-blend-mode: multiply;
+    opacity: 0.4;
     pointer-events: none;
     user-select: none;
   }
   .section-divider{
-    max-width: 300px;
-    margin: 0 auto;
-    opacity: 0.14;
-    mix-blend-mode: multiply;
+    max-width: 260px;
+    margin: 0 auto 0 8%;
+    opacity: 0.55;
   }
   .section-divider img{ width: 100%; display: block; }
-  .hero .bg-illus{
-    top: 4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 260px;
-    max-width: 58vw;
+  .hero .bg-illus.is-left{
+    top: 10px;
+    left: -10px;
+    width: 210px;
+    max-width: 50vw;
   }
-  .family .bg-illus{
-    right: -10px;
-    bottom: -10px;
-    width: 220px;
-    max-width: 46vw;
+  .hero .bg-illus.is-right{
+    top: 40px;
+    right: -20px;
+    width: 150px;
+    max-width: 38vw;
+  }
+  .family .bg-illus.is-right{
+    right: -20px;
+    bottom: 0;
+    width: 150px;
+    max-width: 34vw;
+  }
+  .family .bg-illus.is-left{
+    left: -10px;
+    top: 30px;
+    width: 160px;
+    max-width: 40vw;
   }
   .venue .bg-illus{
     top: -20px;
@@ -243,27 +252,39 @@
     transform: translateX(-50%);
     width: 480px;
     max-width: 90vw;
+    opacity: 0.22;
   }
-  .schedule .bg-illus{
-    left: 50%;
-    bottom: 10px;
-    transform: translateX(-50%);
-    width: 360px;
-    max-width: 80vw;
+  .schedule .bg-illus.is-right{
+    right: -10px;
+    bottom: 4px;
+    width: 200px;
+    max-width: 46vw;
+  }
+  .schedule .bg-illus.is-left{
+    left: -20px;
+    top: 20px;
+    width: 190px;
+    max-width: 44vw;
+    opacity: 0.25;
   }
   .rsvp .bg-illus{
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 300px;
-    max-width: 70vw;
-  }
-  footer .bg-illus{
-    top: -16px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;
+    left: -10px;
+    width: 230px;
     max-width: 55vw;
+  }
+  footer .bg-illus.is-right{
+    top: 4px;
+    right: 12px;
+    width: 150px;
+    max-width: 36vw;
+    opacity: 0.5;
+  }
+  footer .bg-illus.is-left{
+    top: 30px;
+    left: 8px;
+    width: 150px;
+    max-width: 38vw;
   }
 
   /* ---------- HERO ---------- */
@@ -890,7 +911,8 @@
   </div>
 
   <section class="hero">
-    <img class="bg-illus" src="images/illus-doves-heart.png" alt="" aria-hidden="true">
+    <img class="bg-illus is-left" src="images/illus-doves-heart.png" alt="" aria-hidden="true">
+    <img class="bg-illus is-right" src="images/illus-sprig.png" alt="" aria-hidden="true">
     <div class="frame reveal" id="hero-frame">
       <img src="images/hero.jpg" alt="薛舜中 與 陳永馨">
     </div>
@@ -933,7 +955,8 @@
       </div>
     </div>
     <img class="family-photo reveal" src="images/m-studio-dance.jpg" alt="新人合影">
-    <img class="bg-illus" src="images/illus-bouquet.png" alt="" aria-hidden="true">
+    <img class="bg-illus is-right" src="images/illus-bouquet.png" alt="" aria-hidden="true">
+    <img class="bg-illus is-left" src="images/illus-peony-stem.png" alt="" aria-hidden="true">
   </section>
 
   <div class="section-divider"><img src="images/illus-heart-vine-divider.png" alt="" aria-hidden="true"></div>
@@ -987,7 +1010,8 @@
       <a id="cal-google" class="cal-btn" target="_blank" rel="noopener">+ Google 日曆</a>
       <a id="cal-ics" class="cal-btn">+ Apple / Outlook</a>
     </div>
-    <img class="bg-illus" src="images/illus-champagne-tower.png" alt="" aria-hidden="true">
+    <img class="bg-illus is-right" src="images/illus-champagne-tower.png" alt="" aria-hidden="true">
+    <img class="bg-illus is-left" src="images/illus-couple-dance.png" alt="" aria-hidden="true">
   </section>
 
   <section class="rsvp">
@@ -1026,12 +1050,15 @@
   </dialog>
 
   <footer>
-    <img class="bg-illus" src="images/illus-cherub.png" alt="" aria-hidden="true">
+    <img class="bg-illus is-right" src="images/illus-cherub.png" alt="" aria-hidden="true">
+    <img class="bg-illus is-left" src="images/illus-rose.png" alt="" aria-hidden="true">
     <img src="images/m-rings.jpg" alt="戒指">
     <p class="thanks">感謝您撥冗參與，見證我們人生中最重要的時刻</p>
     <p class="names">薛舜中　＆　陳永馨</p>
     <p class="credit">Designed by <a href="https://ux-circles.com/web" target="_blank" rel="noopener">UX CIRCLES</a></p>
   </footer>
+
+  <div class="confetti-layer" id="confetti-layer"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -1524,6 +1551,5 @@
     });
   })();
 </script>
-<div class="confetti-layer" id="confetti-layer"></div>
 </body>
 </html>
