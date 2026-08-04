@@ -1177,11 +1177,39 @@
     function drawFoil(){
       const w = canvas.width, h = canvas.height;
       ctx.globalCompositeOperation = 'source-over';
+
+      // Base metallic gradient — a few stops for a brushed-foil sheen
+      // instead of one flat blend.
       const grad = ctx.createLinearGradient(0, 0, w, h);
-      grad.addColorStop(0, '#c9a877');
-      grad.addColorStop(1, '#8f6f47');
+      grad.addColorStop(0,    '#d4b483');
+      grad.addColorStop(0.22, '#b8935f');
+      grad.addColorStop(0.5,  '#c9a877');
+      grad.addColorStop(0.78, '#a17f4f');
+      grad.addColorStop(1,    '#8f6f47');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, h);
+
+      // Fine diagonal hatching for a brushed-metal texture.
+      ctx.save();
+      ctx.globalAlpha = 0.06;
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1;
+      for (let x = -h; x < w; x += 5) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x + h, h);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Soft diagonal shine band, like light catching foil.
+      const shine = ctx.createLinearGradient(0, 0, w, h);
+      shine.addColorStop(0.30, 'rgba(255,255,255,0)');
+      shine.addColorStop(0.42, 'rgba(255,255,255,0.22)');
+      shine.addColorStop(0.5,  'rgba(255,255,255,0)');
+      ctx.fillStyle = shine;
+      ctx.fillRect(0, 0, w, h);
+
       ctx.fillStyle = 'rgba(255,255,255,0.9)';
       ctx.font = `italic ${Math.max(13, w * 0.048)}px "EB Garamond", serif`;
       ctx.textAlign = 'center';
