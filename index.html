@@ -311,6 +311,14 @@
   .gallery img:nth-child(3n+3){ transition-delay: 0.26s; }
   @media (max-width: 720px){
     .gallery{ column-count: 2; }
+    .gallery img,
+    .gallery img:hover{
+      /* box-shadow gets clipped at column-fragment boundaries on
+         mobile (2-col) - same class of WebKit rendering bug as the
+         wax-seal, so just drop it here rather than restructure the
+         whole masonry layout to work around it */
+      box-shadow: none;
+    }
   }
 
   /* ---------- LIGHTBOX ---------- */
