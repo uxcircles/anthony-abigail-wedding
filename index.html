@@ -378,6 +378,34 @@
     .lightbox-close{ top: 14px; right: 14px; font-size: 30px; }
   }
 
+  /* ---------- CONFETTI ---------- */
+  .confetti-layer{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+  }
+  .confetti-piece{
+    position: absolute;
+    animation: confettiDriftX var(--dur) linear forwards;
+  }
+  @keyframes confettiDriftX{
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(var(--fx)); }
+  }
+  .confetti-inner{
+    width: 100%;
+    height: 100%;
+    border-radius: 1px;
+    animation: confettiArcY var(--dur) forwards;
+  }
+  @keyframes confettiArcY{
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; animation-timing-function: cubic-bezier(0.15,0.75,0.3,1); }
+    30%  { transform: translateY(var(--py)) rotate(var(--rot1)); opacity: 1; animation-timing-function: cubic-bezier(0.45,0,0.8,0.4); }
+    100% { transform: translateY(var(--fy)) rotate(var(--rot2)); opacity: 0; }
+  }
+
   /* ---------- VENUE ---------- */
   .venue h2{
     font-size: clamp(26px, 4vw, 34px);
@@ -653,6 +681,8 @@
     <p class="credit">Designed by <a href="https://ux-circles.com/web" target="_blank" rel="noopener">UX CIRCLES</a></p>
   </footer>
 
+  <div class="confetti-layer" id="confetti-layer"></div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
   // ---- Envelope intro ----
@@ -726,6 +756,69 @@
       if (e.key === 'ArrowLeft') show(index - 1);
       if (e.key === 'ArrowRight') show(index + 1);
     });
+  })();
+
+  // ---- Confetti burst when scrolling to the footer ----
+  (function(){
+    const confettiLayer = document.getElementById('confetti-layer');
+    const footerEl = document.querySelector('footer');
+    if (!confettiLayer || !footerEl) return;
+
+    function launchConfetti(){
+      const colors = ['#a3835a', '#c9a877', '#e7d2c6', '#6b6156', '#f1e9da'];
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const count = 130;
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        const inner = document.createElement('div');
+        inner.className = 'confetti-inner';
+
+        // Alternate cannons: left side shoots up-right, right side shoots up-left.
+        const fromLeft = i % 2 === 0;
+        const originX = fromLeft ? vw * -0.03 : vw * 1.03;
+        const originY = vh * 1.05;
+        const dirSign = fromLeft ? 1 : -1;
+
+        // X moves at a constant velocity for the whole flight (real projectiles don't
+        // decelerate horizontally) — only Y is affected by gravity's accel/decel.
+        const totalX = dirSign * (vw * 0.5 + Math.random() * vw * 0.55);
+        const peakY = -(vh * 0.68 + Math.random() * vh * 0.34);
+        const fallY = peakY + vh * 0.65 + Math.random() * vh * 0.3;
+        const dur = 1.9 + Math.random() * 0.6;
+
+        piece.style.left = `${originX}px`;
+        piece.style.top = `${originY}px`;
+        piece.style.setProperty('--dur', `${dur}s`);
+        piece.style.setProperty('--fx', `${totalX}px`);
+        inner.style.setProperty('--py', `${peakY}px`);
+        inner.style.setProperty('--fy', `${fallY}px`);
+        inner.style.setProperty('--rot1', `${(Math.random() * 400 - 200)}deg`);
+        inner.style.setProperty('--rot2', `${(Math.random() * 700 - 350)}deg`);
+        const w = 3 + Math.random() * 3.5;
+        const h = 6 + Math.random() * 5;
+        piece.style.width = `${w}px`;
+        piece.style.height = `${h}px`;
+        inner.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const delay = Math.random();
+        piece.style.animationDelay = `${delay}s`;
+        inner.style.animationDelay = piece.style.animationDelay;
+        piece.appendChild(inner);
+        confettiLayer.appendChild(piece);
+        setTimeout(() => piece.remove(), (delay + dur + 0.2) * 1000);
+      }
+    }
+
+    const footerIO = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          launchConfetti();
+          footerIO.unobserve(footerEl);
+        }
+      });
+    }, { threshold: 0.5 });
+    footerIO.observe(footerEl);
   })();
 
   const venueCoords = [25.0556686, 121.5482403];

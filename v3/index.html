@@ -1286,16 +1286,17 @@
         inner.style.setProperty('--fy', `${fallY}px`);
         inner.style.setProperty('--rot1', `${(Math.random() * 400 - 200)}deg`);
         inner.style.setProperty('--rot2', `${(Math.random() * 700 - 350)}deg`);
-        const w = 5 + Math.random() * 5;
-        const h = 9 + Math.random() * 8;
+        const w = 3 + Math.random() * 3.5;
+        const h = 6 + Math.random() * 5;
         piece.style.width = `${w}px`;
         piece.style.height = `${h}px`;
         inner.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.animationDelay = `${Math.random() * 0.18}s`;
+        const delay = Math.random();
+        piece.style.animationDelay = `${delay}s`;
         inner.style.animationDelay = piece.style.animationDelay;
         piece.appendChild(inner);
         confettiLayer.appendChild(piece);
-        setTimeout(() => piece.remove(), (dur + 0.2) * 1000);
+        setTimeout(() => piece.remove(), (delay + dur + 0.2) * 1000);
       }
     }
 
