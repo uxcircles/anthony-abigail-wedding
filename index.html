@@ -120,6 +120,13 @@
          short on wider phones - scale the clearance with vw instead */
       margin-top: calc(25vw + 12px);
     }
+    .wax-seal img{
+      /* drop-shadow on this PNG has repeatedly rendered as a hard
+         rectangle on some iOS devices instead of following the seal's
+         shape - just drop the shadow on mobile rather than keep
+         chasing a device-specific WebKit rendering bug */
+      filter: none;
+    }
   }
   .envelope-bottom-stack{
     position: absolute;
